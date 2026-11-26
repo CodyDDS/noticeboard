@@ -31,6 +31,40 @@ container.appendChild(div);
 }
 loadMessages()
 
+document.getElementById('loginButton')
+.addEventListener('click', async function() {
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;
+const { data, error } = await supabase.auth.signInWithPassword({
+email: email,
+password: password
+});
+if (error) {
+alert(error.message);
+} else {
+alert('You are now logged in!');
+updateAuthStatus();
+}
+});
+
+document.getElementById('logoutButton')
+.addEventListener('click', async function() {
+await supabase.auth.signOut();
+updateAuthStatus();
+})
+
+async function updateAuthStatus() {
+const { data } = await supabase.auth.getUser();
+const loggedIn = !!data.user;
+document.getElementById('authStatus').textContent =
+loggedIn ? 'Logged in as ' + data.user.email : 'Not logged in';
+document.getElementById('loginButton').hidden = loggedIn;
+document.getElementById('registerButton').hidden = loggedIn;
+document.getElementById('logoutButton').hidden = !loggedIn;
+document.getElementById('messageForm').hidden = !loggedIn;
+}
+updateAuthStatus()
+
 const form = document.getElementById('messageForm');
 form.addEventListener('submit', async function(event) {
 event.preventDefault();
