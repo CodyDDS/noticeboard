@@ -1,4 +1,4 @@
-import { createClient } from
+mport { createClient } from
 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 const supabase = createClient(
 'https://eqtnubczwmlmwsgtiicp.supabase.co',
@@ -6,16 +6,14 @@ const supabase = createClient(
 )
 
 async function loadMessages() {
-const { error } = await supabase
+const { data, error } = await supabase
 .from('messages')
-.insert([
-{
-title: title,
-message: message,
-author: user.email,
-user_id: user.id
+.select('*')
+.order('created_at', { ascending: false })
+if (error) {
+console.error(error)
+return
 }
-])
 const container = document.getElementById('messages');
 container.innerHTML = '';
 data.forEach(item => {
@@ -31,21 +29,11 @@ div.append(title, message, author);
 container.appendChild(div);
 });
 }
-loadMessages();
+loadMessages()
 
 const form = document.getElementById('messageForm');
 form.addEventListener('submit', async function(event) {
 event.preventDefault();
-
-const { data, error } = await supabase
-.from('messages')
-.insert([
-{
-title: title,
-message: message,
-author: author
-}
-]);
 const title = document.getElementById('title').value;
 const message = document.getElementById('message').value;
 const author = document.getElementById('author').value;
@@ -67,3 +55,4 @@ form.reset();
 loadMessages();
 }
 });
+
