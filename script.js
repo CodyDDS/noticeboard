@@ -37,12 +37,15 @@ const form = document.getElementById('messageForm');
 form.addEventListener('submit', async function(event) {
 event.preventDefault();
 
-const { data: { user }, error: authError } = await
-supabase.auth.getUser();
-if (authError || !user) {
-alert('Please log in before submitting a message');
-return;
+const { data, error } = await supabase
+.from('messages')
+.insert([
+{
+title: title,
+message: message,
+author: author
 }
+]);
 const title = document.getElementById('title').value;
 const message = document.getElementById('message').value;
 const author = document.getElementById('author').value;
