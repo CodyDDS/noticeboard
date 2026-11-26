@@ -82,7 +82,7 @@ user_id: user.id
 const title = document.getElementById('title').value;
 const message = document.getElementById('message').value;
 const author = document.getElementById('author').value;
-const { data, error } = await supabase
+const { data, error2 } = await supabase
 .from('messages')
 .insert([
 {
