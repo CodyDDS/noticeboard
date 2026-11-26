@@ -68,6 +68,17 @@ updateAuthStatus()
 const form = document.getElementById('messageForm');
 form.addEventListener('submit', async function(event) {
 event.preventDefault();
+  // code to get the details of the logged in user (if there is one)
+const { error } = await supabase
+.from('messages')
+.insert([
+{
+title: title,
+message: message,
+author: user.email,
+user_id: user.id
+}
+]);
 const title = document.getElementById('title').value;
 const message = document.getElementById('message').value;
 const author = document.getElementById('author').value;
